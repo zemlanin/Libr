@@ -24,11 +24,15 @@
             } 
         };
 
-        function sign_book() {
-            var form = document.forms['sign_book'];
-            var a_id = form.elements["author_id"].value;
-            var b_id = form.elements["book_id"].value;
-            put_req("/signbook/"+a_id+"/"+b_id);
+        function post_req(link) {
+            var client = new XMLHttpRequest();
+            client.open('POST', link, true);
+            client.send(null);
+            client.onreadystatechange = function(){
+                if (client.readyState == 4 && client.status == 200){
+                    window.location = client.responseText;
+                }
+            } 
         };
     </script>
 </head>
