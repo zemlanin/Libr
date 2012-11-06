@@ -9,3 +9,6 @@ class BookForm(Form):
 
 class AuthorshipForm(Form):
     books = SelectMultipleField('Authors', coerce=int)
+
+class SearchForm(Form):
+    query = TextField('Query')

@@ -1,0 +1,25 @@
+{% extends 'header.html' %}
+{% block body %}
+    {% if authors or books %}
+    {% if authors %}
+        <h3>authors found:</h3>
+        <ul id="authors">
+        {% for author in authors %}
+            <li><a href="{{ url_for('singleauthor', a_id=author.id) }}">{{ author.name }}</a></li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if books %}
+        <h3>books found:</h3>
+        <ul id="books">
+        {% for book in books %}
+            <li><a href="{{ url_for('singlebook', b_id=book.id) }}">{{ book.title }}</a></li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% else %}
+    <h3>nothing found</h3>
+    {% endif %}
+{% endblock %}

@@ -1,6 +1,7 @@
 #-*- coding: utf-8 -*-
 from flask import Flask, render_template, request, redirect, url_for
-from forms import BookForm, AuthorForm, AuthorshipForm
+import re
+from forms import BookForm, AuthorForm, AuthorshipForm, SearchForm
 from database import db_session, init_db
 from models import Book, Author
 
@@ -17,7 +18,11 @@ def shutdown_session(exception=None):
 def index():
     books = Book.query.all()
     authors = Author.query.all()
-    forms = {'book': BookForm(), 'author': AuthorForm()}
+    forms = {
+        'book': BookForm(),
+        'author': AuthorForm(),
+        'search': SearchForm()
+    }
     page = {'title': 'Libr'}
     return render_template("index.html", **locals())
 
@@ -41,7 +46,8 @@ def singleauthor(a_id):
         forms = {
             'author': AuthorForm(),
             'book': BookForm(),
-            'authorship': AuthorshipForm()
+            'authorship': AuthorshipForm(),
+            'search': SearchForm()
         }
         forms['authorship'].books.choices = [(b.id, b.title) for b in Book.query.all()]
         return render_template("author.html", **locals())
@@ -67,7 +73,10 @@ def singlebook(b_id):
     if request.method == "GET":
         authors = book.authors
         page = {'title': book.title}
-        forms = {'book': BookForm()}
+        forms = {
+            'book': BookForm(),
+            'search': SearchForm()
+        }
         return render_template("book.html", **locals())
     elif request.method == "POST":
         book.title = request.form["title"]
@@ -95,6 +104,15 @@ def unsignbook(a_id, b_id):
     author.books.remove(Book.query.filter(Book.id == b_id).one())
     db_session.commit()
     return url_for("singleauthor", a_id=a_id)
+
+@app.route("/search", methods=["POST"])
+def search():
+    query = request.form['query']
+    authors = Author.query.filter(Author.name.like('%'+query+'%')).all()
+    books = Book.query.filter(Book.title.like('%'+query+'%')).all()
+    page = {'title': 'Search: '+query}
+    forms = {'search': SearchForm()}
+    return render_template("search.html", **locals())
 
 if __name__ == "__main__":
     app.run()

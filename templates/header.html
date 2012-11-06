@@ -1,21 +1,22 @@
 <html>
 <head>
     <title>{{ page.title }}</title>
+    <style type="text/css">
+        * {padding: 0; margin: 0;}
+        body {margin: 30px auto; width: 600px; font-family: sans-serif;}
+        a {text-decoration: none;}
+        div#head {float:left; width: 600px;}
+        h1 {float: left;}
+        form#search {float:right;}
+        form input.h_input {border: none; font-size: 2em;}
+        form input.h_input:hover {background-color: yellow;}
+        
+        form select {width: 300px;}
+    </style>
     <script type="text/javascript">
         function delete_req(link) {
             var client = new XMLHttpRequest();
             client.open('DELETE', link, true);
-            client.send(null);
-            client.onreadystatechange = function(){
-                if (client.readyState == 4 && client.status == 200){
-                    window.location = client.responseText;
-                }
-            } 
-        };
-
-        function put_req(link) {
-            var client = new XMLHttpRequest();
-            client.open('PUT', link, true);
             client.send(null);
             client.onreadystatechange = function(){
                 if (client.readyState == 4 && client.status == 200){
@@ -37,5 +38,12 @@
     </script>
 </head>
 <body>
-    <h1><a href="/">Libr</a></h1>
+    <div id="head">
+        <h1><a href="{{ url_for('index') }}">Libr</a></h1>
+        <form action="/search" method="POST" id="search">
+            {{ forms.search.query(value = queryr) }}
+        </form>
+    </div>
     {% block body %}{% endblock %}
+</body>
+</html>

@@ -1,9 +1,9 @@
 {% extends 'header.html' %}
 {% block body %}
     <form action="{{ url_for('singleauthor', a_id=author.id) }}" method="POST">
-        {{ forms.author.name(value = author.name) }} <a href="{{ url_for('singleauthor', a_id=author.id) }}">[∞]</a>
+        <a href="{{ url_for('singleauthor', a_id=author.id) }}">[∞]</a> {{ forms.author.name(value = author.name, class = "h_input") }}
+        <input type="button" value="DELETE" onclick="delete_req('{{ url_for('singleauthor', a_id=author.id) }}')" />
     </form>
-    <input type="button" value="DELETE" onclick="delete_req('{{ url_for('singleauthor', a_id=author.id) }}')" />
 
     <ul id="books">
     {% for book in books %}
@@ -15,6 +15,4 @@
         {{ forms.authorship.books }}
         <input type="submit"> 
     </form>
-</body>
-</html>
 {% endblock %}
