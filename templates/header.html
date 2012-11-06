@@ -1,0 +1,37 @@
+<html>
+<head>
+    <title>{{ page.title }}</title>
+    <script type="text/javascript">
+        function delete_req(link) {
+            var client = new XMLHttpRequest();
+            client.open('DELETE', link, true);
+            client.send(null);
+            client.onreadystatechange = function(){
+                if (client.readyState == 4 && client.status == 200){
+                    window.location = client.responseText;
+                }
+            } 
+        };
+
+        function put_req(link) {
+            var client = new XMLHttpRequest();
+            client.open('PUT', link, true);
+            client.send(null);
+            client.onreadystatechange = function(){
+                if (client.readyState == 4 && client.status == 200){
+                    window.location = client.responseText;
+                }
+            } 
+        };
+
+        function sign_book() {
+            var form = document.forms['sign_book'];
+            var a_id = form.elements["author_id"].value;
+            var b_id = form.elements["book_id"].value;
+            put_req("/signbook/"+a_id+"/"+b_id);
+        };
+    </script>
+</head>
+<body>
+    <h1><a href="/">Libr</a></h1>
+    {% block body %}{% endblock %}
