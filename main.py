@@ -1,13 +1,12 @@
 #-*- coding: utf-8 -*-
 from flask import Flask, render_template, request, redirect, url_for
-import re
 from forms import BookForm, AuthorForm, AuthorshipForm, SearchForm
-from database import db_session, init_db
+from database import db_session
 from models import Book, Author
 
 DEBUG = True
 
-app = Flask(__name__)
+app = Flask(__name__, static_path='/static', static_url_path='/static', static_folder='static')
 app.config.from_object(__name__)
 
 @app.teardown_request
@@ -24,7 +23,7 @@ def index():
         'search': SearchForm()
     }
     page = {'title': 'Libr'}
-    return render_template("index.html", **locals())
+    return render_template("index.html", **locals()) # I REGRET NOTHING
 
 @app.route("/author/add", methods=["POST"])
 def addauthor():

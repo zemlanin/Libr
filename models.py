@@ -1,3 +1,4 @@
+#-*- coding: utf-8 -*-
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.schema import ForeignKey, Table
 from sqlalchemy.orm import relationship

@@ -1,22 +1,26 @@
 {% extends 'header.html' %}
 {% block body %}
+<div class="datalist">
     <h3>authors:</h3>
-    <form action="{{ url_for('addauthor') }}" method="POST">
-        {{ forms.author.name }}
-    </form>
     <ul id="authors">
     {% for author in authors %}
-        <li><a href="{{ url_for('singleauthor', a_id=author.id) }}">{{ author.name }}</a></li>
+        <li><a href="{{ url_for('singleauthor', a_id=author.id) }}">{{ author.name }}</a> <input type="button" value="DELETE" onclick="delete_req('{{ url_for('singleauthor', a_id=author.id) }}')"  class="editing"/></li>
     {% endfor %}
     </ul>
-
-    <h3>books:</h3>
-    <form action="{{ url_for('addbook') }}" method="POST">
-        <input type="text" name="book_title">
+    <form action="{{ url_for('addauthor') }}" method="POST" class="editing">
+        + {{ forms.author.name }} <input type="submit" value="Submit"> 
     </form>
+</div>
+
+<div class="datalist">
+    <h3>books:</h3>
     <ul id="books">
     {% for book in books %}
-        <li><a href="{{ url_for('singlebook', b_id=book.id) }}">{{ book.title }}</a></li>
+        <li><a href="{{ url_for('singlebook', b_id=book.id) }}">{{ book.title }}</a><input type="button" value="DELETE" onclick="delete_req('{{ url_for('singlebook', b_id=book.id) }}')" class="editing"/></li>
     {% endfor %}
     </ul>
+    <form action="{{ url_for('addbook') }}" method="POST" class="editing">
+        + {{ forms.book.title }} <input type="submit" value="Submit"> 
+    </form>
+</div>
 {% endblock %}

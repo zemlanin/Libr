@@ -1,22 +1,13 @@
 <html>
 <head>
     <title>{{ page.title }}</title>
-    <style type="text/css">
-        * {padding: 0; margin: 0;}
-        body {margin: 30px auto; width: 600px; font-family: sans-serif;}
-        a {text-decoration: none;}
-        div#head {float:left; width: 600px;}
-        h1 {float: left;}
-        form#search {float:right;}
-        form input.h_input {border: none; font-size: 2em;}
-        form input.h_input:hover {background-color: yellow;}
-        
-        form select {width: 300px;}
-    </style>
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
     <script type="text/javascript">
-        function delete_req(link) {
+    // Да, в jQuery есть $.ajax(), но здесь и без дополнительных прослоек хорошо
+        function delete_req(url) {
             var client = new XMLHttpRequest();
-            client.open('DELETE', link, true);
+            client.open('DELETE', url, true);
             client.send(null);
             client.onreadystatechange = function(){
                 if (client.readyState == 4 && client.status == 200){
@@ -25,9 +16,9 @@
             } 
         };
 
-        function post_req(link) {
+        function post_req(url) {
             var client = new XMLHttpRequest();
-            client.open('POST', link, true);
+            client.open('POST', url, true);
             client.send(null);
             client.onreadystatechange = function(){
                 if (client.readyState == 4 && client.status == 200){
@@ -36,14 +27,31 @@
             } 
         };
     </script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("a#edit_mode").click(function(){
+                $(".editing").slideToggle("fast");
+                if ($("input.h_input").attr("readonly")) {
+                    $("input.h_input").attr("readonly", false);
+                    $("input.h_input").css("background-color", "yellow");
+                } else {
+                    $("input.h_input").attr("readonly", true);
+                    $("input.h_input").css("background-color", "white");
+                }
+            });
+        });
+    </script>
 </head>
 <body>
     <div id="head">
         <h1><a href="{{ url_for('index') }}">Libr</a></h1>
         <form action="/search" method="POST" id="search">
-            {{ forms.search.query(value = queryr) }}
+            {{ forms.search.query(value = query) }}
         </form>
     </div>
     {% block body %}{% endblock %}
+    <div id="footer">
+        2012 Anton Verinov <a id="edit_mode" href="#">[edit]</a>
+    </div>
 </body>
 </html>

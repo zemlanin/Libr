@@ -1,18 +1,23 @@
 {% extends 'header.html' %}
 {% block body %}
-    <form action="{{ url_for('singleauthor', a_id=author.id) }}" method="POST">
-        <a href="{{ url_for('singleauthor', a_id=author.id) }}">[∞]</a> {{ forms.author.name(value = author.name, class = "h_input") }}
-        <input type="button" value="DELETE" onclick="delete_req('{{ url_for('singleauthor', a_id=author.id) }}')" />
-    </form>
+<form action="{{ url_for('singleauthor', a_id=author.id) }}" method="POST">
+    <a href="{{ url_for('singleauthor', a_id=author.id) }}">[∞]</a> {{ forms.author.name(value = author.name, class = "h_input", readonly="readonly") }}
+    <input type="button" value="DELETE" onclick="delete_req('{{ url_for('singleauthor', a_id=author.id) }}')"  class="editing"/>
+</form>
 
-    <ul id="books">
-    {% for book in books %}
-        <li><a href="{{ url_for('singlebook', b_id=book.id) }}">{{ book.title }}</a> <input type="button" value="UNSIGN" onclick="post_req('{{ url_for('unsignbook', a_id=author.id, b_id=book.id) }}')" /></li>
-    {% endfor %}
-    </ul>
+<div class="datalist">
+    {% if books %}
+        <h3>Author of:</h3>
+        <ul id="books">
+        {% for book in books %}
+            <li><a href="{{ url_for('singlebook', b_id=book.id) }}">{{ book.title }}</a> <input type="button" value="UNSIGN" onclick="post_req('{{ url_for('unsignbook', a_id=author.id, b_id=book.id) }}')" class="editing"/></li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+</div>
 
-    <form action="{{ url_for('signbook', a_id=author.id) }}" method="POST">
-        {{ forms.authorship.books }}
-        <input type="submit"> 
-    </form>
+<form action="{{ url_for('signbook', a_id=author.id) }}" method="POST" id="authorship" class="editing">
+    {{ forms.authorship.books }}
+    <input type="submit" value="Add authorship"> 
+</form>
 {% endblock %}
