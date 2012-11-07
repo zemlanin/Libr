@@ -61,10 +61,14 @@ def singleauthor(a_id):
 
 @app.route("/book/add", methods=["POST"])
 def addbook():
-    b = Book(request.form["title"])
-    db_session.add(b)
-    db_session.commit()
-    return redirect(url_for("singlebook", b_id=b.id))
+    form = BookForm(request.form)
+    if form.validate():
+        b = Book(form.title.data)
+        db_session.add(b)
+        db_session.commit()
+        return redirect(url_for("singlebook", b_id=b.id))
+    else:
+        return redirect(url_for("index"))
 
 @app.route("/book/<int:b_id>", methods=["GET", "POST", "DELETE"])
 def singlebook(b_id):
