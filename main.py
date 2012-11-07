@@ -51,8 +51,10 @@ def singleauthor(a_id):
         forms['authorship'].books.choices = [(b.id, b.title) for b in Book.query.all()]
         return render_template("author.html", **locals())
     elif request.method == "POST":
-        author.name = request.form["name"]
-        db_session.commit()
+        form = AuthorForm(request.form)
+        if form.validate():
+            author.name = form.name.data
+            db_session.commit()
         return redirect(url_for("singleauthor", a_id=a_id)) # либо рендерить?..
     elif request.method == "DELETE":
         db_session.delete(author)
@@ -82,8 +84,10 @@ def singlebook(b_id):
         }
         return render_template("book.html", **locals())
     elif request.method == "POST":
-        book.title = request.form["title"]
-        db_session.commit()
+        form = BookForm(request.form)
+        if form.validate():
+            book.title = form.title.data
+            db_session.commit()
         return redirect(url_for("singlebook", b_id=b_id))
     elif request.method == "DELETE":
         db_session.delete(book)
